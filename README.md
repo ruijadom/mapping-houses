@@ -1,1 +1,1 @@
-# Portugal Weather Stations
+# Houses mapping with Next.js, React and GraphQL
