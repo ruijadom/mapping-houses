@@ -1,14 +1,12 @@
 import { FunctionComponent, ReactNode } from "react";
 import Link from "next/link";
-// import { useAuth } from "src/auth/useAuth";
+import { useAuth } from "src/auth/useAuth";
 
 interface IProps {
   main: React.ReactNode;
 }
 const Layout: FunctionComponent<IProps> = ({ main }) => {
-  const authenticated = false;
-
-  const handleLogout = () => null;
+  const { logout, authenticated } = useAuth();
 
   return (
     <div className="bg-gray-900 max-w-screen-2xl mx-auto text-white">
@@ -29,7 +27,7 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
               <Link href="/houses/add">
                 <a>Add House</a>
               </Link>
-              <button onClick={handleLogout}>Logout</button>
+              <button onClick={logout}>Logout</button>
             </>
           ) : (
             <Link href="/auth">
