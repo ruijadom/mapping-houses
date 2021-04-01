@@ -42,7 +42,9 @@ export default function HouseForm({}: IProps) {
     register({ name: "longitude" }, { required: true, min: -180, max: 180 });
   }, [register]);
 
-  const handleCreate = async (data: IFormData) => {};
+  const handleCreate = async (data: IFormData) => {
+    console.log(data);
+  };
 
   const onSubmit = (data: IFormData) => {
     setSubmitting(false);
@@ -105,6 +107,37 @@ export default function HouseForm({}: IProps) {
             style={{ width: "576px", height: `${(9 / 16) * 576}px` }}
           />
         )}
+        {errors.image && <p>{errors.image.message}</p>}
+      </div>
+
+      <div className="mt-4">
+        <label htmlFor="bedrooms" className="block">
+          Beds
+        </label>
+        <input
+          type="number"
+          name="bedrooms"
+          id="bedrooms"
+          ref={register({
+            required: "Pleae enter the number of bedrooms",
+            max: { value: 10, message: "Whooahh, to big of a house" },
+            min: { value: 1, message: "Must have at least 1 bedroom" },
+          })}
+        />
+        {errors.bedrooms && <p>{errors.bedrooms.message}</p>}
+      </div>
+
+      <div className="mt-4">
+        <button
+          className="px-4 py-2 mr-2 font-bold bg-blue-500 rounded hover:bg-blue-700"
+          type="submit"
+          disabled={submitting}
+        >
+          Save
+        </button>
+        <Link href="/">
+          <a>Cancel</a>
+        </Link>
       </div>
     </form>
   );
