@@ -2,9 +2,9 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 // import { useMutation, gql } from "@apollo/client";
 // import { useRouter } from "next/router";
-// import Link from "next/link";
+import Link from "next/link";
 // import { Image } from "cloudinary-react";
-// import { SearchBox } from "./searchBox";
+import { SearchBox } from "./searchBox";
 // import {
 //   CreateHouseMutation,
 //   CreateHouseMutationVariables,
@@ -27,6 +27,7 @@ interface IProps {}
 
 export default function HouseForm({}: IProps) {
   const [submitting, setSubmitting] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string>();
   const {
     register,
     handleSubmit,
@@ -56,8 +57,54 @@ export default function HouseForm({}: IProps) {
         <label htmlFor="search" className="block">
           Search for your address
         </label>
-        {/* SEARCH FIELD */}
+        <SearchBox
+          onSelectAddress={(address, latitude, longitude) => {
+            setValue("address", address);
+            setValue("latitude", latitude);
+            setValue("longitude", longitude);
+          }}
+          defaultValue=""
+        />
         {errors.address && <p>{errors.address.message}</p>}
+      </div>
+
+      <div className="mt-4">
+        <label
+          htmlFor="image"
+          className="block p-4 border-4 border-gray-600 border-dashed cursor-pointer"
+        >
+          Click to add image (16:9)
+        </label>
+        <input
+          id="image"
+          type="file"
+          name="image"
+          accept="image/*"
+          style={{ display: "none" }}
+          ref={register({
+            validate: (fileList: FileList) => {
+              if (fileList.length === 1) return true;
+              return "Please upload one file";
+            },
+          })}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            if (event?.target?.files?.[0]) {
+              const file = event.target.files[0];
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setPreviewImage(reader.result as string);
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+        />
+        {previewImage && (
+          <img
+            src={previewImage}
+            className="object-cover mt-4"
+            style={{ width: "576px", height: `${(9 / 16) * 576}px` }}
+          />
+        )}
       </div>
     </form>
   );
