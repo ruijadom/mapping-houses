@@ -70,75 +70,78 @@ export default function HouseForm({}: IProps) {
         {errors.address && <p>{errors.address.message}</p>}
       </div>
 
-      <div className="mt-4">
-        <label
-          htmlFor="image"
-          className="block p-4 border-4 border-gray-600 border-dashed cursor-pointer"
-        >
-          Click to add image (16:9)
-        </label>
-        <input
-          id="image"
-          type="file"
-          name="image"
-          accept="image/*"
-          style={{ display: "none" }}
-          ref={register({
-            validate: (fileList: FileList) => {
-              if (fileList.length === 1) return true;
-              return "Please upload one file";
-            },
-          })}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            if (event?.target?.files?.[0]) {
-              const file = event.target.files[0];
-              const reader = new FileReader();
-              reader.onloadend = () => {
-                setPreviewImage(reader.result as string);
-              };
-              reader.readAsDataURL(file);
-            }
-          }}
-        />
-        {previewImage && (
-          <img
-            src={previewImage}
-            className="object-cover mt-4"
-            style={{ width: "576px", height: `${(9 / 16) * 576}px` }}
+      <>
+        <div className="mt-4">
+          <label
+            htmlFor="image"
+            className="block p-4 border-4 border-gray-600 border-dashed cursor-pointer"
+          >
+            Click to add image (16:9)
+          </label>
+          <input
+            id="image"
+            name="image"
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            ref={register({
+              validate: (fileList: FileList) => {
+                if (fileList.length === 1) return true;
+                return "Please upload one file";
+              },
+            })}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              if (event?.target?.files?.[0]) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  setPreviewImage(reader.result as string);
+                };
+                reader.readAsDataURL(file);
+              }
+            }}
           />
-        )}
-        {errors.image && <p>{errors.image.message}</p>}
-      </div>
+          {previewImage && (
+            <img
+              src={previewImage}
+              className="object-cover mt-4"
+              style={{ width: "576px", height: `${(9 / 16) * 576}px` }}
+            />
+          )}
+          {errors.image && <p>{errors.image.message}</p>}
+        </div>
 
-      <div className="mt-4">
-        <label htmlFor="bedrooms" className="block">
-          Beds
-        </label>
-        <input
-          type="number"
-          name="bedrooms"
-          id="bedrooms"
-          ref={register({
-            required: "Pleae enter the number of bedrooms",
-            max: { value: 10, message: "Whooahh, to big of a house" },
-            min: { value: 1, message: "Must have at least 1 bedroom" },
-          })}
-        />
-        {errors.bedrooms && <p>{errors.bedrooms.message}</p>}
-      </div>
+        <div className="mt-4">
+          <label htmlFor="bedrooms" className="block">
+            Beds
+          </label>
+          <input
+            id="bedrooms"
+            name="bedrooms"
+            type="number"
+            className="p-2"
+            ref={register({
+              required: "Please enter the number of bedrooms",
+              max: { value: 10, message: "Wooahh, too big of a house" },
+              min: { value: 1, message: "Must have at least 1 bedroom" },
+            })}
+          />
+          {errors.bedrooms && <p>{errors.bedrooms.message}</p>}
+        </div>
 
-      <div className="mt-4">
-        <button
-          className="px-4 py-2 mr-2 font-bold bg-blue-500 rounded hover:bg-blue-700"
-          type="submit"
-          disabled={submitting}
-        >
-          Save
-        </button>
-        <Link href="/">
-          <a>Cancel</a>
-        </Link>
-      </div>
+        <div className="mt-4">
+          <button
+            className="px-4 py-2 font-bold bg-blue-500 rounded hover:bg-blue-700"
+            type="submit"
+            disabled={submitting}
+          >
+            Save
+          </button>{" "}
+          <Link href="/">
+            <a>Cancel</a>
+          </Link>
+        </div>
+      </>
     </form>
   );
 }
