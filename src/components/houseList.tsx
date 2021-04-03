@@ -4,14 +4,19 @@ import { HousesQuery_houses } from "src/generated/HousesQuery";
 import { IoBedOutline } from "react-icons/io5";
 interface IProps {
   houses: HousesQuery_houses[];
+  setHightlightedId: (id: string | null) => void;
 }
 
-export default function HouseList({ houses }: IProps) {
+export default function HouseList({ houses, setHightlightedId }: IProps) {
   return (
     <>
       {houses.map((house) => (
         <Link key={house.id} href={`/houses/${house.id}`}>
-          <div className="flex flex-wrap px-6 pt-4 cursor-pointer">
+          <div
+            className="flex flex-wrap px-6 pt-4 cursor-pointer"
+            onMouseEnter={() => setHightlightedId(house.id)}
+            onMouseLeave={() => setHightlightedId(null)}
+          >
             <div className="sm:w-full md:w-1/2">
               <Image
                 cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
