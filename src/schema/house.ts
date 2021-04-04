@@ -118,6 +118,7 @@ export class HouseResolver {
     });
   }
 
+  // Mutation for create house
   @Authorized()
   @Mutation((_returns) => House, { nullable: true })
   async createHouse(
@@ -127,6 +128,31 @@ export class HouseResolver {
     return await ctx.prisma.house.create({
       data: {
         userId: ctx.uid,
+        image: input.image,
+        address: input.address,
+        latitude: input.coordinates.latitude,
+        longitude: input.coordinates.longitude,
+        bedrooms: input.bedrooms,
+      },
+    });
+  }
+
+  // Mutation for update house
+  @Authorized()
+  @Mutation((_returns) => House, { nullable: true })
+  async updateHouse(
+    @Arg("id") id: string,
+    @Arg("input") input: HouseInput,
+    @Ctx() ctx: AuthorizedContext
+  ) {
+    const houseId = parseInt(id, 10);
+    const house = await ctx.prisma.house.findOne({ where: { id: houseId } });
+
+    if (!house || house.userId !== ctx.uid) return null;
+
+    return await ctx.prisma.house.update({
+      where: { id: houseId },
+      data: {
         image: input.image,
         address: input.address,
         latitude: input.coordinates.latitude,
