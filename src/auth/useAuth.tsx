@@ -47,9 +47,11 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       .onIdTokenChanged(async (user) => {
         if (user) {
           const token = await user.getIdToken();
+          // Set Cooking in server side (http only cookie)
           setTokenCookie(token);
           setUser(user);
         } else {
+          // Set Cooking in server side (http only cookie)
           removeTokenCookie();
           setUser(null);
         }
